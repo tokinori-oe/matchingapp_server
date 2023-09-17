@@ -1,5 +1,5 @@
 import json
-from channels.generics.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import RequestForLoverModel
 
 class RequestConsumer(AsyncWebsocketConsumer):

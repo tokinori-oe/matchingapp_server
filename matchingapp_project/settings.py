@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'profiling' ,
     'SearchForLover',
     'channels',
+    'matchingapp_project',
 ]
 
 CHANNEL_LAYERS = {
@@ -51,7 +52,7 @@ CHANNEL_LAYERS = {
 }
 
 # ASGIアプリケーション設定
-ASGI_APPLICATION = 'your_project.routing.application'
+ASGI_APPLICATION = 'matchingapp_project.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,3 +156,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ],
 }
+
+import django
+django.setup()
