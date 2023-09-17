@@ -17,6 +17,5 @@ urlpatterns = [
     path('api/get_accountinfo/',AccountInfoFromIDView.as_view(), name="get-accountinfo"),
     path('api/change_accountinfo/',ChangeProfileInfoView.as_view(), name="change-accountinfo"),
     path('api/get_recommendation/',GetRecommendation.as_view(), name='get-recommendation'),
-    path('api/get_request/', GetRequestView.as_view(), name='get-request'),
 ]
 

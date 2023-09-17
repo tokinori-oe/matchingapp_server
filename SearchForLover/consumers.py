@@ -14,7 +14,6 @@ class RequestConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data) #json.loadsでデシリアライズ
         sender = data['sender']
         receiver = data['receiver']
-        status = data['status']
        
         # バリデーションの追加
         if not sender or not receiver:
@@ -23,7 +22,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
             return
        
         #statusはデフォルトでpendingになってるけどそこはどうなるん？
-        message = RequestForLoverModel(sender=sender, receiver=receiver, status=status)
+        message = RequestForLoverModel(sender=sender, receiver=receiver)
         message.save()
         
         #対象のユーザーにリクエストを送信
