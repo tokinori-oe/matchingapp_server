@@ -4,6 +4,6 @@ from SearchForLover.consumers import RequestConsumer
 
 websocket_urlpatterns = ProtocolTypeRouter({
     "websocket": URLRouter([
-        path("request_path/(?P<receiver>\d+)/$", RequestConsumer.as_asgi()),
+        path("request_path/39/", RequestConsumer.as_asgi()), #ここの数字を一般化する
     ]),
 })
