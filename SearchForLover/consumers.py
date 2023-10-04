@@ -20,12 +20,11 @@ class RequestConsumer(AsyncWebsocketConsumer):
         del self.channel_id_mapping[self.user_id]
     
     #websocket接続を開始したら辞書にchannelを保存する
-    #待機中のリクエストから接続したユーザー向けのリクエストを探す
+    #idが自身のidで、isRequestSentがFalseであるリクエストを探す、ヒットしたら全て送信する
     async def connect(self): 
         await self.accept() 
         await self.save_channel_with_id()
-        '''リクエストを探す'''
-        
+                
 
     #websocket接続を切断したらキューから対象channelを削除する
     async def disconnect(self, close_code):
@@ -43,9 +42,8 @@ class RequestConsumer(AsyncWebsocketConsumer):
             )
             '''
             ここにreceiverからの受け取ったことを伝えるメールを確認するコードを書く
-            それを受け取って完了する、メールが消失した場合、誤配信のエラーハンドリングを行う
+            それを受け取って完了する->isRequestSentをtrueに変更する、メールが消失した場合、誤配信のエラーハンドリングを行う
             '''
-        #この例外処理はメッセージを送信したが正常に
         except Exception as e:
             print(f"例外が発生しました:{e}")
                 
@@ -53,7 +51,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         #メッセージを受信し、DBに保存
         # バリデーションをでシリアライズした後行う
-        data = json.loads(text_data) #json.loadsでデシリアライズ
+        data = json.loads(text_data) 
         sender = data['sender']
         receiver = data['receiver']
         request_message = data['request_message']
