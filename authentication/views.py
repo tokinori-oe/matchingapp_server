@@ -8,6 +8,7 @@ from .serializers import UserSerializer, UserLoginSerializer
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import status
+from django.core.exceptions import ValidationError
 
 class CheckUsernameView(APIView):
     def post(self, request, format=None):
@@ -19,7 +20,7 @@ class CheckUsernameView(APIView):
         try:
             validate_password(password)
         except ValidationError as e:
-            return Response({"error":', '.join(e.messages)},status=status.HTTP_400_BAD_REQUEST) #どういう意味？
+            return Response({"error":', '.join(e.messages)},status=status.HTTP_400_BAD_REQUEST)
         try:
             validate_email(email)
         except ValidationError:
@@ -33,7 +34,7 @@ class CheckUsernameView(APIView):
             return Response({"message": "User can be registered"}, status=status.HTTP_200_OK)
 
     
-class UserLoginView(APIView): #APIViewはどういうクラス？APIビューはWeb APIエンドポイントのロジックを定義し、リクエストを処理してレスポンスを返す役割を果たす
+class UserLoginView(APIView): #APIビューはWeb APIエンドポイントのロジックを定義し、リクエストを処理してレスポンスを返す役割を果たす
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -41,7 +42,7 @@ class UserLoginView(APIView): #APIViewはどういうクラス？APIビューは
             password = serializer.validated_data['password']
             user = authenticate(username=username, password=password) #authenticateはユーザーデータと自動で照合してくれる。照合したらユーザーオブジェクトを返す。しなかった場合はNoneを返す
             if user:
-                token, created = Token.objects.get_or_create(user=user) #特定のユーザーに関連するトークンを取得し、存在しない場合はトークンを作成する
+                token, created = Token.objects.get_or_create(user=user) 
                 return Response({'token':token.key})
             else:
                 return Response({'error':'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

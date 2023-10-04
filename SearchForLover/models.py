@@ -9,6 +9,12 @@ class RequestForLoverModel(models.Model):
     #送るユーザー
     sender = models.ForeignKey(UserProfile, related_name= 'sent_requests', on_delete=models.CASCADE)
     
+    #メッセージ
+    request_message = models.TextField(blank = True)
+    
+    #senderからreceiverに送信されたかをbool値で判断する
+    isRequestSent = models.BooleanField(default=False)
+    
     #リクエストの状態
     STATUS_CHOICES =(
         ('PENDING', '承認待ち'),
