@@ -12,9 +12,6 @@ class RequestForLoverModel(models.Model):
     #メッセージ
     request_message = models.TextField(blank = True)
     
-    #senderからreceiverに送信されたかをbool値で判断する
-    isRequestSent = models.BooleanField(default=False)
-    
     #リクエストの状態
     STATUS_CHOICES =(
         ('PENDING', '承認待ち'),

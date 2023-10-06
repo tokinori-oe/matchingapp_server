@@ -17,7 +17,17 @@ class RequestConsumer(AsyncWebsocketConsumer):
     #idが自身のidで、isRequestSentがFalseであるリクエストを探す、ヒットしたら全て送信する
     async def connect(self) -> None: 
         self.accept() 
-        await self.save_channel_with_id() 
+        await self.save_channel_with_id()
+        await ListOfUnsentMessage =self.SearchMessage() #このawaitの使い方合っているのか？
+        user_channel_name = self.channel_id_mapping[self.user_id]
+        try:
+            self.channel_layer.send(
+                user_channel_name,
+                ListofUnsentMessage
+            )
+        except Exception as e:
+            print(f"例外が発生しました:{e}")
+            
         
     #websocket接続を切断したらキューから対象channelを削除する
     async def disconnect(self, close_code) -> None:
@@ -68,11 +78,28 @@ class RequestConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f"例外が発生しました:{e}")
+        '''
+        一定時間内に送信完了メールが来なかったら送信者に送信されなかったことをメールするする（タイムアウト）
+        '''
+        if...
+        timeoutActionInSendingRequests()
             
     
     #receiverからの受け取ったことを伝えるメールを確認するコードを書く
     #それを受け取って完了する->isRequestSentをtrueに変更する、メールが消失した場合、誤配信のエラーハンドリングを行う
     async def receive_confirmation_catchrequest(self, data) ->None:
         pass
-                
+    
+    #対象のユーザーにまだ送信されていないデータを探索する
+    async def SearchMessage(self) -> ?:
+        pass
+    
+    #DBへの操作が実行されなかった場合、一定回数再度実行する
+    async def AgainOperationOnDB(self) -> None:
+        pass
+    
+    #一定時間内に送信完了メールが来なかったら送信者に送信されなかったことをメールする
+    async def timeoutActionInSendingRequests(self) -> None:
+        pass
+    
     
