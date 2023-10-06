@@ -7,7 +7,7 @@ import asyncio
 
 class RequestConsumer(AsyncWebsocketConsumer):
     
-    #idとchannel名が辞書として保存された辞書をキューグループの代わりとして使う、スケーラビリティを考慮したイベントハンドリングをする
+    #idとchannel名が辞書として保存された辞書をキューグループの代わりとして使う
     
     channel_id_mapping: dict[int, str]
     #channel名からuser_idを抽出する
@@ -19,7 +19,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
         self.accept() 
         await self.save_channel_with_id()
         await ListOfUnsentMessage =self.SearchMessage() #このawaitの使い方合っているのか？
-        user_channel_name = self.channel_id_mapping[self.user_id]
+        user_channel_name: int = self.channel_id_mapping[self.user_id]
         try:
             self.channel_layer.send(
                 user_channel_name,
@@ -35,7 +35,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
         
     #メッセージを受信し、DBに保存
     async def receive(self, text_data) -> None:
-        data = json.loads(text_data) 
+        data: dict = json.loads(text_data) 
         content :str = data['content']
         if content=="MatchingRequest":
             self.processMatchingRequest(data)
@@ -44,9 +44,9 @@ class RequestConsumer(AsyncWebsocketConsumer):
         
             
     async def processMatchingRequest(self, data) ->None:
-        sender = data['sender']
-        receiver = data['receiver']
-        request_message = data['request_message']
+        sender: int = data['sender']
+        receiver: int = data['receiver']
+        request_message: str = data['request_message']
         
         if not sender or not receiver:
             await self.send(text_data=json.dumps({'error': 'Incomplete data received'}))
