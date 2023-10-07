@@ -6,7 +6,7 @@ from django.contrib.auth.models import  User
 class UserProfile(models.Model):
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length =20, unique= False, default = '')
+    nickname = models.CharField(max_length =20, unique= False)
     school_name = models.CharField(max_length=100)
     faculty = models.CharField(max_length=100)
     department = models.CharField(max_length=100)
