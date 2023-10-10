@@ -14,7 +14,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
     user_id: int = 39
     
     #websocket接続を開始したら辞書にchannelを保存する
-    #idが自身のidで、isRequestSentがFalseであるリクエストを探す、ヒットしたら全て送信する
+    #idが自身のidで、isRequestSentがFalseであるリクエストだけではない、メールを探す、ヒットしたら全て送信する
     async def connect(self) -> None: 
         self.accept() 
         await self.save_channel_with_id()
@@ -27,7 +27,15 @@ class RequestConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f"例外が発生しました:{e}")
-            
+        
+        '''
+        一定時間内に送信完了メールが来なかったらリトライを何回か行い、それでも返信が来なかったら送信者に送信されなかったことをメールする（タイムアウト）
+        メールが来たらリクエストデータをDBに保存する
+        '''
+        if...
+        self.timeoutActionInSendingRequests()
+        else:
+        #メール内容をDBに保存する
         
     #websocket接続を切断したらキューから対象channelを削除する
     async def disconnect(self, close_code) -> None:
@@ -42,7 +50,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
         if content=="ReceiptConfirmation":
             self.receive_confirmation_catchrequest(data)
         
-            
+    #requestが来た場合の処理
     async def processMatchingRequest(self, data) ->None:
         sender: int = data['sender']
         receiver: int = data['receiver']
@@ -53,11 +61,21 @@ class RequestConsumer(AsyncWebsocketConsumer):
             return
        
         message = RequestForLoverModel(sender=sender, receiver=receiver)
-        message.save()
-       
+        
         if self.user_id in self.channel_id_mapping:
             user_channel_name = self.channel_id_mapping[self.user_id]
             await self.send_request(user_channel_name, sender, request_message)
+        
+        '''
+        一定時間内に送信完了メールが来なかったらリトライを何回か行い、それでも受信レスポンスが来なかったら送信者に送信されなかったことをメールする（タイムアウト）
+        メールが来たらリクエストデータをDBに保存する
+        '''
+        if...
+        self.timeoutActionInSendingRequests()
+        else:
+        message.save()
+       
+        
             
     async def save_channel_with_id(self) -> None:
         self.channel_id_mapping[self.user_id] = self.channel_name
@@ -78,11 +96,7 @@ class RequestConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f"例外が発生しました:{e}")
-        '''
-        一定時間内に送信完了メールが来なかったら送信者に送信されなかったことをメールするする（タイムアウト）
-        '''
-        if...
-        timeoutActionInSendingRequests()
+       
             
     
     #receiverからの受け取ったことを伝えるメールを確認するコードを書く

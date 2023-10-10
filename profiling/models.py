@@ -15,6 +15,7 @@ class UserProfile(models.Model):
     age = models.IntegerField(blank=True, null=True)
     grade = models.CharField(max_length=10, null=True)
     gender = models.CharField(max_length=1, null=False)
+    photo = models.ImageField(upload_to='profiling_photos/', null= True)
     
     class Meta:
         app_label = 'profiling'

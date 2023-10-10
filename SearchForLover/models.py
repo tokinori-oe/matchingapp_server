@@ -7,8 +7,8 @@ class RequestForLoverModel(models.Model):
     受け取るユーザーのid, nickname, 送るユーザーのid, nickname, メッセージ、リクエストが送られた日時、
     リクエストの状態のmodel
     '''
-    receiver = models.ForeignKey(UserProfile, related_name = 'receiver', on_delete=models.CASCADE)
-    sender = models.ForeignKey(UserProfile, related_name= 'sender', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(UserProfile, related_name = 'receiver_id', on_delete=models.CASCADE)
+    sender = models.ForeignKey(UserProfile, related_name= 'sender_id', on_delete=models.CASCADE)
     request_message = models.TextField(blank = True)
     STATUS_CHOICES =(
         ('PENDING', '承認待ち'),
@@ -29,9 +29,7 @@ class UnsentRequestModel(models.Model):
     senderのid, receiverのid, senderのnickname, receiverのnickname, senderからのmessage、
     senderがリクエストした日にちを入れる
     '''
-    receiver = models.ForeignKey(UserProfile, related_name = 'receiver', on_delete=models.CASCADE)
-    receiver_nickname = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
-    sender = models.ForeignKey(UserProfile, related_name= 'sender', on_delete=models.CASCADE)
-    sender_nickname = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
+    receiver = models.ForeignKey(UserProfile, related_name = 'unsent_receiver_id', on_delete=models.CASCADE)
+    sender = models.ForeignKey(UserProfile, related_name= 'unsent_sender_id', on_delete=models.CASCADE)
     request_message = models.TextField(blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
